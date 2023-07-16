@@ -3,7 +3,7 @@ Apriltag Toolbox
 
 ![ROS](https://img.shields.io/badge/ros-%230A0FF9.svg?style=for-the-badge&logo=ros&logoColor=white)
 
-![workflow](https://github.com/kousuke-takeuchi/apriltag-toolbox/actions/workflows/action.yml/badge.svg)
+![workflow](https://github.com/kousuke-takeuchi/apriltag-toolbox/actions/workflows/test.yml/badge.svg)
 
 ### installation
 
