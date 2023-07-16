@@ -1,9 +1,9 @@
-#include "aprilslam/visualizer.h"
+#include "apriltag_toolbox/visualizer.h"
 
-namespace aprilslam {
+namespace apriltag_toolbox {
 
 void ApriltagVisualizer::PublishApriltagsMarker(
-    const aprilslam::Apriltags& apriltags) {
+    const apriltag_toolbox::Apriltags& apriltags) {
   PublishApriltagsMarker(apriltags.apriltags, apriltags.header.frame_id,
                          apriltags.header.stamp);
 }
@@ -30,7 +30,7 @@ void ApriltagVisualizer::PublishApriltagsMarker(
 
   // Add and delete markers
   visualization_msgs::MarkerArray marker_array;
-  for (const aprilslam::Apriltag& tag : tags) {
+  for (const apriltag_toolbox::Apriltag& tag : tags) {
     visualization_msgs::Marker marker;
     marker.header.frame_id = frame_id;
     marker.header.stamp = stamp;
@@ -59,4 +59,4 @@ void ApriltagVisualizer::PublishApriltagsMarker(
   old_ids = new_ids;
 }
 
-}  // namespace aprilslam
+}  // namespace apriltag_toolbox

@@ -1,6 +1,6 @@
-#include "aprilslam/utils.h"
+#include "apriltag_toolbox/utils.h"
 
-namespace aprilslam {
+namespace apriltag_toolbox {
 
 bool IsInsideImageCenter(double x, double y, int w, int h, double k) {
   return (x > w / k) && (y > h / k) && (x < (w - w / k)) && (y < (h - h / k));
@@ -93,4 +93,4 @@ Eigen::Quaterniond RodriguesToQuat(const cv::Mat& rvec) {
   return Eigen::Quaterniond(Eigen::AngleAxis<double>(rn, rnorm));
 }
 
-}  // namespace aprilslam
+}  // namespace apriltag_toolbox
