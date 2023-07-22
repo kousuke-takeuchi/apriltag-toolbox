@@ -1,25 +1,15 @@
 <?xml version="1.0"?>
 <launch>
     <arg name="name" default="test1" />
-    <arg name="bagfile" default="$(find apriltag_toolbox)/resources/$(arg name).bag" />
     <arg name="rviz_config" default="$(find apriltag_toolbox)/rviz/example.rviz" />
 
-    <node pkg="rosbag" type="play" name="rosbag_play" args="--clock $(arg bagfile)" />
     <node pkg="rviz" type="rviz" name="rviz" args="-d $(arg rviz_config)" />
-    <node pkg="apriltag_toolbox" type="yaml_to_camera_info_publisher.py" name="yaml_to_camera_info_publisher">
-    	<param name="filename" value="$(find apriltag_toolbox)/resources/camera.yaml" />
-    </node>
-
-    <node name="image_republish" pkg="image_transport" type="republish" args="compressed raw">
-    	<remap from="in" to="/pg_17274483/image_raw" />
-	<remap from="out" to="/image_raw" />
-    </node>
 
     <!-- apriltag_ros continuous detection node -->
     <node pkg="apriltag_ros" type="apriltag_ros_continuous_node" name="apriltag_ros_continuous_node" clear_params="true" output="screen">
         <!-- Remap topics from those used in code to those on the ROS network -->
-        <remap from="image_rect" to="/image_raw" />
-        <remap from="camera_info" to="/camera_info" />
+        <remap from="image_rect" to="/rgb_publisher/color/image" />
+        <remap from="camera_info" to="/rgb_publisher/color/camera_info" />
 
         <param name="publish_tag_detections_image" type="bool" value="true" /><!-- default: false -->
         <param name="queue_size" type="int" value="1" />
