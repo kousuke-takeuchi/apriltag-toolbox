@@ -4,7 +4,7 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
-        - /TF1/Frames1
+        - /TF1
         - /TF1/Tree1
         - /Image1
       Splitter Ratio: 0.5
@@ -55,7 +55,7 @@ Visualization Manager:
       Value: true
     - Class: rviz/TF
       Enabled: true
-      Frame Timeout: 15
+      Frame Timeout: 1
       Frames:
         0:
           Value: true
@@ -164,7 +164,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 1.3221858739852905
+      Distance: 2.3301432132720947
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
