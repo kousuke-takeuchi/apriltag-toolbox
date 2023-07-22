@@ -1,10 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 project(apriltag_toolbox)
 
-## Compile as C++11, supported in ROS Kinetic and newer
-# add_compile_options(-std=c++11)
-
-
 set(USE_ADDRESS_SANITIZER OFF CACHE BOOL "compile with address sanitizer support")
 if(USE_ADDRESS_SANITIZER)
   set(CMAKE_CXX_FLAGS "-fsanitize=address  -fsanitize=leak -g")
@@ -66,10 +62,10 @@ find_package(Boost REQUIRED COMPONENTS graph)
 ## catkin specific configuration ##
 ###################################
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES apriltag_toolbox
-#  CATKIN_DEPENDS apriltag_ros geometry_msgs nav_msgs roscpp sensor_msgs std_msgs
-#  DEPENDS system_lib
+  #  INCLUDE_DIRS include
+  #  LIBRARIES apriltag_toolbox
+  #  CATKIN_DEPENDS apriltag_ros geometry_msgs nav_msgs roscpp sensor_msgs std_msgs
+  #  DEPENDS system_lib
 )
 
 ###########
@@ -77,7 +73,7 @@ catkin_package(
 ###########
 
 include_directories(
-# include
+  include
   ${catkin_INCLUDE_DIRS}
 )
 
@@ -98,10 +94,10 @@ add_executable(mapper_node src/apriltag_toolbox/mapper_node.cpp)
 
 # Add cmake target dependencies of the executable
 # same as for the library above
-add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(mapper_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 # Specify libraries to link a library or executable target against
-target_link_libraries(${PROJECT_NAME}_node
+target_link_libraries(mapper_node
   ${catkin_LIBRARIES}
 )
 
