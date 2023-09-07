@@ -12,11 +12,14 @@ int Mapper::pose_cnt = 0;
 Mapper::Mapper(double relinearize_thresh, int relinearize_skip)
     : init_(false),
       params_(ISAM2GaussNewtonParams(), relinearize_thresh, relinearize_skip),
-      isam2_(params_),
-      tag_noise_(noiseModel::Diagonal::Sigmas(
-          (Vector(6) << Vector3::Constant(0.20), Vector3::Constant(0.1)))),
-      small_noise_(noiseModel::Diagonal::Sigmas(
-          (Vector(6) << Vector3::Constant(0.10), Vector3::Constant(0.05)))) {}
+      isam2_(params_) {
+  Vector tag_noise_vector(6);
+  tag_noise_vector << 0.2,0.2,0.2,0.1,0.1,0.1;
+  Vector small_noise_vector(6);
+  small_noise_vector << 0.1,0.1,0.1,0.05,0.05,0.05;
+  tag_noise_=noiseModel::Diagonal::Sigmas(tag_noise_vector);
+  small_noise_=noiseModel::Diagonal::Sigmas(small_noise_vector);
+}
 
 void Mapper::AddPose(const geometry_msgs::Pose &pose) {
   pose_cnt++;
@@ -24,10 +27,10 @@ void Mapper::AddPose(const geometry_msgs::Pose &pose) {
   initial_estimates_.insert(Symbol('x', pose_cnt), pose_);
 }
 
-void Mapper::Initialize(const Apriltag &tag_w) {
+void Mapper::Initialize(const apriltag_ros::AprilTagDetection &tag_w) {
   ROS_ASSERT_MSG(pose_cnt == 1, "Incorrect initial pose");
   AddLandmark(tag_w, Pose3());
-  AddPrior(tag_w.id);
+  AddPrior(tag_w.id[0]);
   init_ = true;
 }
 
@@ -41,29 +44,29 @@ void Mapper::AddPrior(int landmark_id) {
       PriorFactor<Pose3>(Symbol('l', landmark_id), Pose3(), small_noise_));
 }
 
-void Mapper::AddLandmark(const Apriltag &tag_c, const Pose3 &pose) {
-  initial_estimates_.insert(Symbol('l', tag_c.id), pose);
-  all_ids_.insert(tag_c.id);
-  all_tags_c_[tag_c.id] = tag_c;
+void Mapper::AddLandmark(const apriltag_ros::AprilTagDetection &tag_c, const Pose3 &pose) {
+  initial_estimates_.insert(Symbol('l', tag_c.id[0]), pose);
+  all_ids_.insert(tag_c.id[0]);
+  all_tags_c_[tag_c.id[0]] = tag_c;
 }
 
-void Mapper::AddLandmarks(const std::vector<Apriltag> &tags_c) {
-  for (const Apriltag &tag_c : tags_c) {
+void Mapper::AddLandmarks(const std::vector<apriltag_ros::AprilTagDetection> &tags_c) {
+  for (const apriltag_ros::AprilTagDetection &tag_c : tags_c) {
     // Only add landmark if it's not already added
-    if (all_ids_.find(tag_c.id) == all_ids_.end()) {
+    if (all_ids_.find(tag_c.id[0]) == all_ids_.end()) {
       const Pose3 &w_T_c = pose_;
-      const Pose3 c_T_t = FromGeometryPose(tag_c.pose);
+      const Pose3 c_T_t = FromGeometryPose(tag_c.pose.pose.pose);
       const Pose3 w_T_t = w_T_c.compose(c_T_t);
       AddLandmark(tag_c, w_T_t);
     }
   }
 }
 
-void Mapper::AddFactors(const std::vector<Apriltag> &tags_c) {
+void Mapper::AddFactors(const std::vector<apriltag_ros::AprilTagDetection> &tags_c) {
   Symbol x_i('x', pose_cnt);
-  for (const Apriltag &tag_c : tags_c) {
+  for (const apriltag_ros::AprilTagDetection &tag_c : tags_c) {
     graph_.push_back(BetweenFactor<Pose3>(
-        x_i, Symbol('l', tag_c.id), FromGeometryPose(tag_c.pose), tag_noise_));
+        x_i, Symbol('l', tag_c.id[0]), FromGeometryPose(tag_c.pose.pose.pose), tag_noise_));
   }
 }
 

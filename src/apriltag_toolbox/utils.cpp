@@ -84,13 +84,13 @@ void SetCorners(std::vector<geometry_msgs::Point>* corners,
   */
 }
 
-Eigen::Quaterniond RodriguesToQuat(const cv::Mat& rvec) {
-  Eigen::Vector3d r(rvec.at<double>(0), rvec.at<double>(1), rvec.at<double>(2));
-  // Copied from kr_math pose
-  const double rn = r.norm();
-  Eigen::Vector3d rnorm(0.0, 0.0, 0.0);
-  if (rn > std::numeric_limits<double>::epsilon() * 10) rnorm = r / rn;
-  return Eigen::Quaterniond(Eigen::AngleAxis<double>(rn, rnorm));
-}
+// Eigen::Quaterniond RodriguesToQuat(const cv::Mat& rvec) {
+//   Eigen::Vector3d r(rvec.at<double>(0), rvec.at<double>(1), rvec.at<double>(2));
+//   // Copied from kr_math pose
+//   const double rn = r.norm();
+//   Eigen::Vector3d rnorm(0.0, 0.0, 0.0);
+//   if (rn > std::numeric_limits<double>::epsilon() * 10) rnorm = r / rn;
+//   return Eigen::Quaterniond(Eigen::AngleAxis<double>(rn, rnorm));
+// }
 
 }  // namespace apriltag_toolbox

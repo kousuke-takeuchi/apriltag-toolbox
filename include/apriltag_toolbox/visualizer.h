@@ -5,8 +5,8 @@
 #include <visualization_msgs/Marker.h>
 #include <visualization_msgs/MarkerArray.h>
 #include <rviz/helpers/color.h>
-#include <apriltag_toolbox/Apriltag.h>
-#include <apriltag_toolbox/Apriltags.h>
+#include <apriltag_ros/AprilTagDetectionArray.h>
+#include <apriltag_ros/AprilTagDetection.h>
 
 namespace apriltag_toolbox {
 
@@ -31,8 +31,8 @@ class ApriltagVisualizer {
   }
   void SetAlpha(double alpha) { color_.a = alpha; }
 
-  void PublishApriltagsMarker(const apriltag_toolbox::Apriltags& apriltags);
-  void PublishApriltagsMarker(const std::vector<apriltag_toolbox::Apriltag>& tags,
+  void PublishApriltagsMarker(const apriltag_ros::AprilTagDetectionArray& apriltags);
+  void PublishApriltagsMarker(const std::vector<apriltag_ros::AprilTagDetection>& tags,
                               const std::string& frame_id,
                               const ros::Time& stamp);
 

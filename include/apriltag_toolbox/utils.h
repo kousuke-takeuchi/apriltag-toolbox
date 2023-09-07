@@ -5,7 +5,7 @@
 #include <geometry_msgs/Quaternion.h>
 #include <geometry_msgs/Pose.h>
 #include <Eigen/Geometry>
-#include <opencv2/core/core.hpp>
+// #include <opencv2/core/core.hpp>
 
 namespace apriltag_toolbox {
 
@@ -25,7 +25,7 @@ void SetOrientation(geometry_msgs::Quaternion* quat, double w = 1, double x = 0,
                     double y = 0, double z = 0);
 void SetCorners(std::vector<geometry_msgs::Point>* corners,
                 const geometry_msgs::Pose& pose, double tag_size);
-Eigen::Quaterniond RodriguesToQuat(const cv::Mat& r);
+// Eigen::Quaterniond RodriguesToQuat(const cv::Mat& r);
 
 }  // namespace apriltag_toolbox
 

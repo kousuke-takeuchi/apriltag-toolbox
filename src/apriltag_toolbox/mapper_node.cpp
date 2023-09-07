@@ -3,9 +3,9 @@
 
 namespace apriltag_toolbox {
 
-void MapperNode::TagsCallback(const apriltag_toolbox::ApriltagsConstPtr& tags_c_msg) {
+void MapperNode::TagsCallback(const apriltag_ros::AprilTagDetectionArrayConstPtr& tags_c_msg) {
   // Do nothing if no detection, this prevents checking in the following steps
-  if (tags_c_msg->apriltags.empty()) {
+  if (tags_c_msg->detections.empty()) {
     ROS_WARN_THROTTLE(1, "No tags detected.");
     return;
   }
@@ -15,8 +15,8 @@ void MapperNode::TagsCallback(const apriltag_toolbox::ApriltagsConstPtr& tags_c_
     return;
   }
   // Do nothing if there are no good tags close to the center of the image
-  std::vector<Apriltag> tags_c_good;
-  if (!GetGoodTags(tags_c_msg->apriltags, &tags_c_good)) {
+  std::vector<apriltag_ros::AprilTagDetection> tags_c_good;
+  if (!GetGoodTags(tags_c_msg->detections, &tags_c_good)) {
     ROS_WARN_THROTTLE(1, "No good tags detected.");
     return;
   }
@@ -27,11 +27,12 @@ void MapperNode::TagsCallback(const apriltag_toolbox::ApriltagsConstPtr& tags_c_
   }
   // Do nothing if no pose can be estimated
   geometry_msgs::Pose pose;
-  if (!map_.EstimatePose(tags_c_msg->apriltags, model_.fullIntrinsicMatrix(),
-                         model_.distortionCoeffs(), &pose)) {
-    ROS_WARN_THROTTLE(1, "No 2D-3D correspondence.");
-    return;
-  }
+  pose.orientation.w = 1.0;
+  // if (!map_.EstimatePose(tags_c_msg->detections, model_.fullIntrinsicMatrix(),
+  //                        model_.distortionCoeffs(), &pose)) {
+  //   ROS_WARN_THROTTLE(1, "No 2D-3D correspondence.");
+  //   return;
+  // }
   // Now that with the initial pose calculated, we can do some mapping
   mapper_.AddPose(pose);
   mapper_.AddFactors(tags_c_good);
@@ -81,31 +82,17 @@ void MapperNode::CameraInfoCallback(const sensor_msgs::CameraInfoConstPtr& cinfo
   model_.fromCameraInfo(cinfo_msg);
 }
 
-bool MapperNode::GetGoodTags(const std::vector<Apriltag> tags_c,
-                             std::vector<Apriltag>* tags_c_good) {
-  for (const Apriltag& tag_c : tags_c) {
-    if (IsInsideImageCenter(tag_c.center.x, tag_c.center.y,
-                            model_.cameraInfo().width,
-                            model_.cameraInfo().height, 5)) {
+bool MapperNode::GetGoodTags(const std::vector<apriltag_ros::AprilTagDetection> tags_c,
+                             std::vector<apriltag_ros::AprilTagDetection>* tags_c_good) {
+  for (const apriltag_ros::AprilTagDetection& tag_c : tags_c) {
+    // [TODO] check the angle of tags
+    // if (IsInsideImageCenter(tag_c.center.x, tag_c.center.y,
+    //                         model_.cameraInfo().width,
+    //                         model_.cameraInfo().height, 5)) {
       tags_c_good->push_back(tag_c);
-    }
+    // }
   }
   return !tags_c_good->empty();
 }
 
 }  // namespace apriltag_toolbox
-
-
-int main(int argc, char **argv) {
-  ros::init(argc, argv, "mapper");
-  ros::NodeHandle nh;
-
-  try {
-    apriltag_toolbox::MapperNode mapper_node(nh, "world");
-    ros::spin();
-  }
-  catch (const std::exception &e) {
-    ROS_ERROR("%s: %s", nh.getNamespace().c_str(), e.what());
-  }
-}
-

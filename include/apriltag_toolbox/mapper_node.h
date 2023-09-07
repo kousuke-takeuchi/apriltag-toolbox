@@ -2,7 +2,8 @@
 #define APRILTAG_TOOLBOX_MAPPER_NODE_H_
 
 #include <ros/ros.h>
-#include <apriltag_toolbox/Apriltags.h>
+#include <apriltag_ros/AprilTagDetection.h>
+#include <apriltag_ros/AprilTagDetectionArray.h>
 #include <sensor_msgs/CameraInfo.h>
 #include <geometry_msgs/Pose.h>
 #include <geometry_msgs/Vector3.h>
@@ -29,11 +30,11 @@ class MapperNode {
     		tag_viz_.SetAlpha(0.75);
   	}
 
-  bool GetGoodTags(const std::vector<apriltag_toolbox::Apriltag> tags_c,
-                   std::vector<apriltag_toolbox::Apriltag>* tags_c_good);
+  bool GetGoodTags(const std::vector<apriltag_ros::AprilTagDetection> tags_c,
+                   std::vector<apriltag_ros::AprilTagDetection>* tags_c_good);
 
  private:
-  void TagsCallback(const apriltag_toolbox::ApriltagsConstPtr& tags_c_msg);
+  void TagsCallback(const apriltag_ros::AprilTagDetectionArrayConstPtr& tags_c_msg);
   void CameraInfoCallback(const sensor_msgs::CameraInfoConstPtr& cinfo_msg);
 
   ros::NodeHandle nh_;

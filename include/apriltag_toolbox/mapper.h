@@ -8,7 +8,7 @@
 #include <gtsam/slam/BetweenFactor.h>
 
 #include <geometry_msgs/Pose.h>
-#include <apriltag_toolbox/Apriltags.h>
+#include <apriltag_ros/AprilTagDetection.h>
 #include "apriltag_toolbox/tag_map.h"
 
 namespace apriltag_toolbox {
@@ -24,13 +24,13 @@ class Mapper {
   void Optimize(int num_iterations = 1);
   void Update(apriltag_toolbox::TagMap* map, geometry_msgs::Pose* pose) const;
   void AddPose(const geometry_msgs::Pose& pose);
-  void AddFactors(const std::vector<apriltag_toolbox::Apriltag>& tags_c);
-  void AddLandmarks(const std::vector<apriltag_toolbox::Apriltag>& tags_c);
-  void Initialize(const Apriltag& tag_w);
+  void AddFactors(const std::vector<apriltag_ros::AprilTagDetection>& tags_c);
+  void AddLandmarks(const std::vector<apriltag_ros::AprilTagDetection>& tags_c);
+  void Initialize(const apriltag_ros::AprilTagDetection& tag_w);
   void Clear();
 
  private:
-  void AddLandmark(const apriltag_toolbox::Apriltag& tag_w,
+  void AddLandmark(const apriltag_ros::AprilTagDetection& tag_w,
                    const gtsam::Pose3& pose);
   void AddPrior(int landmark_id);
 
@@ -43,7 +43,7 @@ class Mapper {
   gtsam::noiseModel::Diagonal::shared_ptr tag_noise_;
   gtsam::noiseModel::Diagonal::shared_ptr small_noise_;
   std::set<int> all_ids_;
-  std::map<int, apriltag_toolbox::Apriltag> all_tags_c_;
+  std::map<int, apriltag_ros::AprilTagDetection> all_tags_c_;
 };
 
 gtsam::Pose3 FromGeometryPose(const geometry_msgs::Pose& pose);

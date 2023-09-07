@@ -3,20 +3,20 @@
 namespace apriltag_toolbox {
 
 void ApriltagVisualizer::PublishApriltagsMarker(
-    const apriltag_toolbox::Apriltags& apriltags) {
-  PublishApriltagsMarker(apriltags.apriltags, apriltags.header.frame_id,
+    const apriltag_ros::AprilTagDetectionArray& apriltags) {
+  PublishApriltagsMarker(apriltags.detections, apriltags.header.frame_id,
                          apriltags.header.stamp);
 }
 
 void ApriltagVisualizer::PublishApriltagsMarker(
-    const std::vector<Apriltag>& tags, const std::string& frame_id,
+    const std::vector<apriltag_ros::AprilTagDetection>& tags, const std::string& frame_id,
     const ros::Time& stamp) {
   static std::set<int> old_ids;
 
   // Get new ids
   std::set<int> new_ids;
   std::for_each(tags.begin(), tags.end(),
-                [&](const Apriltag& tag) { new_ids.insert(tag.id); });
+                [&](const apriltag_ros::AprilTagDetection& tag) { new_ids.insert(tag.id[0]); });
 
   // Get union of new and old ids
   std::set<int> union_ids;
@@ -30,18 +30,18 @@ void ApriltagVisualizer::PublishApriltagsMarker(
 
   // Add and delete markers
   visualization_msgs::MarkerArray marker_array;
-  for (const apriltag_toolbox::Apriltag& tag : tags) {
+  for (const apriltag_ros::AprilTagDetection& tag : tags) {
     visualization_msgs::Marker marker;
     marker.header.frame_id = frame_id;
     marker.header.stamp = stamp;
-    marker.ns = tag.family;
-    marker.id = tag.id;
+    // marker.ns = tag.family;
+    marker.id = tag.id[0];
     marker.type = visualization_msgs::Marker::CUBE;
     marker.action = visualization_msgs::Marker::ADD;
-    marker.scale.x = marker.scale.y = tag.size;
+    marker.scale.x = marker.scale.y = tag.size[0];
     marker.scale.z = marker.scale.x / 10;
     marker.color = color_;
-    marker.pose = tag.pose;
+    marker.pose = tag.pose.pose.pose;
     marker_array.markers.push_back(marker);
   }
 
