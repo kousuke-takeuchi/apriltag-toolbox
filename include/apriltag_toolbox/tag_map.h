@@ -2,7 +2,7 @@
 #define APRILTAG_TOOLBOX_TAG_MAP_H_
 
 #include <apriltag_ros/AprilTagDetection.h>
-// #include <opencv2/core/core.hpp>
+#include <opencv2/core/core.hpp>
 #include <set>
 
 namespace apriltag_toolbox {

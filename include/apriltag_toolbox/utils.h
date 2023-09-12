@@ -5,7 +5,7 @@
 #include <geometry_msgs/Quaternion.h>
 #include <geometry_msgs/Pose.h>
 #include <Eigen/Geometry>
-// #include <opencv2/core/core.hpp>
+#include <opencv2/core/core.hpp>
 
 namespace apriltag_toolbox {
 

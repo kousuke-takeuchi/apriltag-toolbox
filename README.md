@@ -22,4 +22,6 @@ sudo apt install libgtsam-dev libgtsam-unstable-dev
 
 ```sh
 rosdep install --from-paths src --ignore-src -r -y
+
+pip3 install gtsam
 ```

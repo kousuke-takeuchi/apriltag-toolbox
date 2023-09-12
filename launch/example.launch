@@ -5,7 +5,7 @@
     <arg name="rviz_config" default="$(find apriltag_toolbox)/rviz/example.rviz" />
 
     <node pkg="rosbag" type="play" name="rosbag_play" args="--clock $(arg bagfile)" />
-    <node pkg="rviz" type="rviz" name="rviz" args="-d $(arg rviz_config)" />
+    <!-- <node pkg="rviz" type="rviz" name="rviz" args="-d $(arg rviz_config)" /> -->
 
     <!-- apriltag_ros continuous detection node -->
     <node pkg="apriltag_ros" type="apriltag_ros_continuous_node" name="apriltag_ros_continuous_node" clear_params="true" output="screen">
@@ -19,5 +19,11 @@
         <!-- load parameters (incl. tag family, tags, etc.) -->
         <rosparam command="load" file="$(find apriltag_toolbox)/config/settings.yaml"/>
         <rosparam command="load" file="$(find apriltag_toolbox)/config/tags.yaml"/>
+    </node>
+
+    <!-- mapper node -->
+    <node pkg="apriltag_toolbox" type="mapper_node.py" name="mapper_node">
+        <remap from="apriltags" to="/tag_detections" />
+        <remap from="camera_info" to="/rgb_publisher/color/camera_info" />
     </node>
 </launch>
