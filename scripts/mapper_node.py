@@ -6,7 +6,7 @@ import rospy
 from image_geometry import PinholeCameraModel
 # from tf2_ros import TransformBroadcaster
 
-from apriltag_ros.msg import AprilTagDetection, AprilTagDetectionArray
+from apriltag_toolbox.msg import AprilTagDetection, AprilTagDetectionArray
 from std_msgs.msg import Header
 from sensor_msgs.msg import CameraInfo
 from geometry_msgs.msg import Pose, Vector3, TransformStamped

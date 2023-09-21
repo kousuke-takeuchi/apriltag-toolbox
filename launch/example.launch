@@ -7,23 +7,19 @@
     <node pkg="rosbag" type="play" name="rosbag_play" args="--clock $(arg bagfile)" />
     <!-- <node pkg="rviz" type="rviz" name="rviz" args="-d $(arg rviz_config)" /> -->
 
-    <!-- apriltag_ros continuous detection node -->
-    <node pkg="apriltag_ros" type="apriltag_ros_continuous_node" name="apriltag_ros_continuous_node" clear_params="true" output="screen">
+    <!-- apriltag detection node -->
+    <node pkg="apriltag_toolbox" type="mapper_main.py" name="apriltag_node" clear_params="true" output="screen">
         <!-- Remap topics from those used in code to those on the ROS network -->
         <remap from="image_rect" to="/rgb_publisher/color/image" />
         <remap from="camera_info" to="/rgb_publisher/color/camera_info" />
 
-        <param name="publish_tag_detections_image" type="bool" value="true" /><!-- default: false -->
-        <param name="queue_size" type="int" value="1" />
-
         <!-- load parameters (incl. tag family, tags, etc.) -->
-        <rosparam command="load" file="$(find apriltag_toolbox)/config/settings.yaml"/>
-        <rosparam command="load" file="$(find apriltag_toolbox)/config/tags.yaml"/>
+        <rosparam command="load" file="$(find apriltag_toolbox)/config/apriltag.yaml"/>
     </node>
 
     <!-- mapper node -->
-    <node pkg="apriltag_toolbox" type="mapper_node.py" name="mapper_node">
+    <!-- <node pkg="apriltag_toolbox" type="mapper_node.py" name="mapper_node">
         <remap from="apriltags" to="/tag_detections" />
         <remap from="camera_info" to="/rgb_publisher/color/camera_info" />
-    </node>
+    </node> -->
 </launch>

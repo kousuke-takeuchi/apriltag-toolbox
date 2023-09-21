@@ -6,7 +6,7 @@ import cv2
 
 import rospy
 from geometry_msgs.msg import Pose
-from apriltag_ros.msg import AprilTagDetection
+from apriltag_toolbox.msg import AprilTagDetection
 
 
 class TagMap:
@@ -42,6 +42,47 @@ class TagMap:
 
     def tags_w(self) -> List[AprilTagDetection]:
         return self._tags_w
+    
+
+    def estimate_pose(self, tags_c : List[AprilTagDetection], K, D):
+        img_pts = []
+        obj_pts = []
+
+        for tag_c in tags_c:
+            # Find 2D-3D correspondences
+            tag_w = self.find_by_id(tag_c.id[0], self.tags_w())
+            if tag_w is not None:
+                for p in tag_w.corners:
+
+
+        # std::for_each(tag_w.corners.begin(), tag_w.corners.end(),
+        #                 [&obj_pts](const geometry_msgs::Point &p_w) {
+        #     obj_pts.emplace_back(p_w.x, p_w.y, p_w.z);
+        # });
+        # std::for_each(tag_c.corners.begin(), tag_c.corners.end(),
+        #                 [&img_pts](const geometry_msgs::Point &p_c) {
+        #     img_pts.emplace_back(p_c.x, p_c.y);
+        # });
+
+        assert len(img_pts) == len(obj_pts), "size mismatch!"
+
+        if len(img_pts) == 0:
+            return
+
+        # Actual pose estimation work here
+        cv::Mat c_r_w, c_t_w, c_R_w;
+
+        success, c_r_w, c_t_w = cv2.solvePnP(obj_pts, img_pts, K, D, flags=0)
+        c_R_w, Jacob = cv2.Rodrigues(c_r_w)
+        w_T_c = -w_R_c.T * c_T_w
+
+        pose.position.x = w_T_c[0]
+        pose.position.y = w_T_c[1]
+        pose.position.z = w_T_c[2]
+
+        Eigen::Quaterniond w_Q_c = RodriguesToQuat(c_r_w).inverse();
+        SetOrientation(&pose->orientation, w_Q_c);
+        return true;
 
     
     ##########

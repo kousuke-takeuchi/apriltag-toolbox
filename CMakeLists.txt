@@ -14,6 +14,7 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   std_msgs
   tf
+  message_generation
 )
 
 find_package(cmake_modules)
@@ -23,10 +24,30 @@ find_package(Boost REQUIRED COMPONENTS graph)
 find_package(OpenCV REQUIRED QUIET)
 
 
+################################################
+## Declare ROS messages, services and actions ##
+################################################
+# Generate messages in the 'msg' folder
+add_message_files(
+  FILES
+  AprilTagDetection.msg
+  AprilTagDetectionArray.msg
+)
+
+# Generate added messages and services with any dependencies listed here
+generate_messages(
+  DEPENDENCIES
+  std_msgs
+  geometry_msgs
+)
+
+
 ###################################
 ## catkin specific configuration ##
 ###################################
-catkin_package()
+catkin_package(
+  CATKIN_DEPENDS message_runtime roscpp rospy
+)
 
 ###########
 ## Build ##

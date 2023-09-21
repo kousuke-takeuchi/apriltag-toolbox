@@ -6,7 +6,7 @@ import gtsam
 
 import rospy
 from geometry_msgs.msg import Pose, Point
-from apriltag_ros.msg import AprilTagDetection
+from apriltag_toolbox.msg import AprilTagDetection
 
 from tag_map import TagMap
 
