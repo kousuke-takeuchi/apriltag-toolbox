@@ -8,12 +8,14 @@ import cv2
 from pupil_apriltags import Detector
 
 import rospy
+import tf
 from tf.transformations import quaternion_from_matrix
 import ros_numpy
 from sensor_msgs.msg import Image, CameraInfo
 from geometry_msgs.msg import Point, Quaternion, Pose, PoseWithCovarianceStamped
 
 from apriltag_toolbox.msg import AprilTagDetectionArray, AprilTagDetection
+from utils import trasform_ros_coord
 
 
 class ApriltagNode(object):
@@ -40,6 +42,7 @@ class ApriltagNode(object):
             decode_sharpening=decode_sharpening,
             debug=False,
         )
+        self.br = tf.TransformBroadcaster()
 
         self.current_image = None
         self.camera_params = None
@@ -92,8 +95,8 @@ class ApriltagNode(object):
             det.decision_margin = tag.decision_margin
             det.center = tag.center.tolist()
             corners = tag.corners
-            corners = corners[0] + corners[1] + corners[2] + corners[3]
-            det.corners = corners.tolist()
+            corners = corners[0].tolist() + corners[1].tolist() + corners[2].tolist() + corners[3].tolist()
+            det.corners = corners
             det.R = tag.pose_R[0, :].tolist() + tag.pose_R[1, :].tolist() + tag.pose_R[2, :].tolist()
             t = tag.pose_t.tolist()
             det.t = tag.pose_t[0].tolist() + tag.pose_t[1].tolist() + tag.pose_t[2].tolist()
@@ -110,9 +113,9 @@ class ApriltagNode(object):
             quat = quat.tolist()
             q = Quaternion(x=quat[0], y=quat[1], z=quat[2], w=quat[3])
             pose = Pose(position=p, orientation=q)
-            det.pose.pose.pose = pose
+            det.pose.pose.pose = trasform_ros_coord(pose)
             det.pose.header = self.current_image.header
-            det.pose.header.frame_id = self.camera_frame
+            det.pose.header.frame_id = tag.tag_id
 
             detections.append(det)
         
@@ -125,8 +128,16 @@ class ApriltagNode(object):
 
         # publish tf
         if self.publish_tf:
-            pass
-
+            for detection in detections:
+                position = [detection.pose.pose.pose.position.x, detection.pose.pose.pose.position.y, detection.pose.pose.pose.position.z]
+                orientation = [detection.pose.pose.pose.orientation.x, detection.pose.pose.pose.orientation.y, detection.pose.pose.pose.orientation.z, detection.pose.pose.pose.orientation.w]
+                self.br.sendTransform(
+                    position,
+                    orientation,
+                    detection.pose.header.stamp,
+                    str(detection.id[0]),
+                    self.camera_frame
+                )
 
         # draw image and publish
         image = self.draw_tags(image, tags)

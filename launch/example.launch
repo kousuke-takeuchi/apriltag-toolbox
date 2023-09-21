@@ -5,10 +5,10 @@
     <arg name="rviz_config" default="$(find apriltag_toolbox)/rviz/example.rviz" />
 
     <node pkg="rosbag" type="play" name="rosbag_play" args="--clock $(arg bagfile)" />
-    <!-- <node pkg="rviz" type="rviz" name="rviz" args="-d $(arg rviz_config)" /> -->
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(arg rviz_config)" />
 
     <!-- apriltag detection node -->
-    <node pkg="apriltag_toolbox" type="mapper_main.py" name="apriltag_node" clear_params="true" output="screen">
+    <node pkg="apriltag_toolbox" type="apriltag_node.py" name="apriltag_node" clear_params="true" output="screen">
         <!-- Remap topics from those used in code to those on the ROS network -->
         <remap from="image_rect" to="/rgb_publisher/color/image" />
         <remap from="camera_info" to="/rgb_publisher/color/camera_info" />
