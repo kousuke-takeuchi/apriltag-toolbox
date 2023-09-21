@@ -6,4 +6,4 @@ refine_edges: 1
 decode_sharpening: 0.25
 tag_size: 0.072
 publish_rate: 10
-publish_tf: true # default: false
+publish_tf: false # default: false

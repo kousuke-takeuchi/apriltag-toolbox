@@ -18,8 +18,8 @@
     </node>
 
     <!-- mapper node -->
-    <!-- <node pkg="apriltag_toolbox" type="mapper_node.py" name="mapper_node">
+    <node pkg="apriltag_toolbox" type="mapper_node.py" name="mapper_node" output="screen">
         <remap from="apriltags" to="/tag_detections" />
         <remap from="camera_info" to="/rgb_publisher/color/camera_info" />
-    </node> -->
+    </node>
 </launch>

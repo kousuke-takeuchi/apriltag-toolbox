@@ -69,18 +69,6 @@ Visualization Manager:
       Enabled: true
       Frame Timeout: 1
       Frames:
-        0:
-          Value: true
-        1:
-          Value: true
-        2:
-          Value: true
-        3:
-          Value: true
-        4:
-          Value: true
-        5:
-          Value: true
         All Enabled: false
         camera:
           Value: true
@@ -104,6 +92,8 @@ Visualization Manager:
           Value: false
         oak_right_camera_optical_frame:
           Value: false
+        world:
+          Value: true
       Marker Alpha: 1
       Marker Scale: 1
       Name: TF
@@ -112,40 +102,15 @@ Visualization Manager:
       Show Names: true
       Tree:
         camera:
-          0:
+          world:
             {}
-          1:
-            {}
-          2:
-            {}
-          3:
-            {}
-          4:
-            {}
-          5:
-            {}
-        oak-d-base-frame:
-          oak-d_frame:
-            oak_imu_frame:
-              {}
-            oak_left_camera_frame:
-              oak_left_camera_optical_frame:
-                {}
-            oak_model_origin:
-              {}
-            oak_rgb_camera_frame:
-              oak_rgb_camera_optical_frame:
-                {}
-            oak_right_camera_frame:
-              oak_right_camera_optical_frame:
-                {}
       Update Interval: 0
       Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
     Default Light: true
-    Fixed Frame: camera
+    Fixed Frame: world
     Frame Rate: 30
   Name: root
   Tools:
@@ -169,7 +134,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 1.1111907958984375
+      Distance: 2.2464797496795654
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -177,17 +142,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 0.08147881925106049
-        Y: 0.02554263174533844
-        Z: 0.18845032155513763
+        X: -0.3498417139053345
+        Y: -0.1314547061920166
+        Z: 0.24558424949645996
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: -1.2402026653289795
+      Pitch: 0.4402035176753998
       Target Frame: <Fixed Frame>
-      Yaw: 1.6904046535491943
+      Yaw: 4.010406017303467
     Saved: ~
 Window Geometry:
   Displays:
@@ -208,4 +173,4 @@ Window Geometry:
     collapsed: false
   Width: 1853
   X: 0
-  Y: 5
+  Y: 10

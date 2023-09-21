@@ -53,31 +53,31 @@ catkin_package(
 ## Build ##
 ###########
 
-include_directories(
-  include
-  ${catkin_INCLUDE_DIRS}
-  ${GTSAM_INCLUDE_DIRS}
-  ${Eigen_INCLUDE_DIRS}
-  ${OpenCV_INCLUDE_DIRS}
-)
+# include_directories(
+#   include
+#   ${catkin_INCLUDE_DIRS}
+#   ${GTSAM_INCLUDE_DIRS}
+#   ${Eigen_INCLUDE_DIRS}
+#   ${OpenCV_INCLUDE_DIRS}
+# )
 
-## Declare a C++ library
-add_library(${PROJECT_NAME}
-    src/${PROJECT_NAME}/mapper.cpp
-    src/${PROJECT_NAME}/tag_map.cpp
-    src/${PROJECT_NAME}/utils.cpp
-    src/${PROJECT_NAME}/visualizer.cpp
-    src/${PROJECT_NAME}/mapper_node.cpp
-    )
+# ## Declare a C++ library
+# add_library(${PROJECT_NAME}
+#     src/${PROJECT_NAME}/mapper.cpp
+#     src/${PROJECT_NAME}/tag_map.cpp
+#     src/${PROJECT_NAME}/utils.cpp
+#     src/${PROJECT_NAME}/visualizer.cpp
+#     src/${PROJECT_NAME}/mapper_node.cpp
+#     )
 
-target_link_libraries(${PROJECT_NAME}
-    ${catkin_LIBRARIES}
-    ${GTSAM_LIBRARIES}
-    ${Eigen_LIBRARIES}
-    ${OpenCV_LIBRARIES}
-    )
+# target_link_libraries(${PROJECT_NAME}
+#     ${catkin_LIBRARIES}
+#     ${GTSAM_LIBRARIES}
+#     ${Eigen_LIBRARIES}
+#     ${OpenCV_LIBRARIES}
+#     )
 
-add_dependencies(${PROJECT_NAME}
-    ${catkin_EXPORTED_TARGETS}
-    ${${PROJECT_NAME}_EXPORTED_TARGETS}
-    )
+# add_dependencies(${PROJECT_NAME}
+#     ${catkin_EXPORTED_TARGETS}
+#     ${${PROJECT_NAME}_EXPORTED_TARGETS}
+#     )

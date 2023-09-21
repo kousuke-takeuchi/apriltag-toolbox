@@ -107,6 +107,7 @@ void Mapper::Clear() {
 
 Pose3 FromGeometryPose(const geometry_msgs::Pose &pose) {
   Point3 t(pose.position.x, pose.position.y, pose.position.z);
+  print(pose.orientation)
   Rot3 R(Eigen::Quaterniond(pose.orientation.w, pose.orientation.x,
                             pose.orientation.y, pose.orientation.z));
   return Pose3(R, t);

@@ -39,7 +39,7 @@ export PYTHONPATH=~/secondary_build_ws/devel/lib/python3/dist-packages:$PYTHONPA
 ```sh
 rosdep install --from-paths src --ignore-src -r -y
 
-pip3 install gtsam pupil-apriltags
+pip3 install gtsam pupil-apriltags numpy-quaternion
 
 source ~/catkin_ws/devel/setup.bash
 ```
