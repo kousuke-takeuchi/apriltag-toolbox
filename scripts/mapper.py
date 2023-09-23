@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 # encoding: utf-8
 from typing import Set, Dict, List
+import pathlib
+import pickle
 
 import gtsam
 
@@ -23,6 +25,7 @@ class Mapper:
     _pose : gtsam.Pose3 = gtsam.Pose3()
     _all_ids : Set[int] = set()
     _all_tags_c : Dict[int, AprilTagDetection] = {}
+    _current_results: gtsam.Values = gtsam.Values()
 
     def __init__(self, relinearize_thresh : float, relinearize_skip : int):
         self._init = False
@@ -39,6 +42,30 @@ class Mapper:
     def init(self) -> bool:
         return self._init
 
+    
+    def load_map(self, folder: pathlib.Path):
+        graph_filename = folder / "graph.g2o"
+        self._graph, self._initial_estimates = gtsam.readG2o(str(graph_filename), True)
+        pydata_filename = folder / "poses.pkl"
+        pydata = pickle.load(open(pydata_filename, "rb"))
+        self._all_ids = pydata["all_ids"]
+        self._all_tags_c = pydata["all_tags_c"]
+        self.pose_cnt = pydata["pose_cnt"]
+        self._init = True
+    
+    
+    def save_map(self, folder: pathlib.Path):
+        graph_filename = folder / "graph.g2o"
+        gtsam.writeG2o(self._graph, self._current_results, str(graph_filename))
+        pydata = {
+            "all_ids": self._all_ids,
+            "all_tags_c": self._all_tags_c,
+            "pose_cnt": self.pose_cnt
+        }
+        pydata_filename = folder / "poses.pkl"
+        pickle.dump(pydata, open(pydata_filename, "wb"))
+
+
     def optimize(self, num_iterations : int = 1):
         self._isam2.update(self._graph, self._initial_estimates)
         if num_iterations > 1:
@@ -48,6 +75,7 @@ class Mapper:
     def update(self, map : TagMap):
         assert len(self._all_ids) == len(self._all_tags_c), "id and size mismatch"
         results = self._isam2.calculateEstimate()
+        self._current_results = results
         # Update the current pose
         cam_pose = results.atPose3(X(self.pose_cnt))
         pose = Pose()

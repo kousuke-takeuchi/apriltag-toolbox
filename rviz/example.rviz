@@ -69,6 +69,18 @@ Visualization Manager:
       Enabled: true
       Frame Timeout: 1
       Frames:
+        0:
+          Value: true
+        1:
+          Value: true
+        2:
+          Value: true
+        3:
+          Value: true
+        4:
+          Value: true
+        5:
+          Value: true
         All Enabled: false
         camera:
           Value: true
@@ -102,15 +114,35 @@ Visualization Manager:
       Show Names: true
       Tree:
         camera:
+          0:
+            {}
+          1:
+            {}
+          2:
+            {}
+          3:
+            {}
+          4:
+            {}
+          5:
+            {}
           world:
             {}
       Update Interval: 0
+      Value: true
+    - Class: rviz/MarkerArray
+      Enabled: true
+      Marker Topic: /apriltags_map
+      Name: MarkerArray
+      Namespaces:
+        {}
+      Queue Size: 100
       Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
     Default Light: true
-    Fixed Frame: world
+    Fixed Frame: camera
     Frame Rate: 30
   Name: root
   Tools:
@@ -134,7 +166,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 2.2464797496795654
+      Distance: 2.248291254043579
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -142,17 +174,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: -0.3498417139053345
-        Y: -0.1314547061920166
-        Z: 0.24558424949645996
+        X: -0.11079747974872589
+        Y: -0.14187705516815186
+        Z: 0.0770755410194397
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.4402035176753998
+      Pitch: 0.6802033185958862
       Target Frame: <Fixed Frame>
-      Yaw: 4.010406017303467
+      Yaw: 6.070390701293945
     Saved: ~
 Window Geometry:
   Displays:
@@ -173,4 +205,4 @@ Window Geometry:
     collapsed: false
   Width: 1853
   X: 0
-  Y: 10
+  Y: 5

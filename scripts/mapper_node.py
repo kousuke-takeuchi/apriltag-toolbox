@@ -1,29 +1,34 @@
 #!/usr/bin/python3
 # encoding: utf-8
 from typing import List
+import os
+import pathlib
 
 import rospy
 import tf
 
-from std_msgs.msg import Header
 from sensor_msgs.msg import CameraInfo
-from geometry_msgs.msg import Pose, Vector3, TransformStamped
 from apriltag_toolbox.msg import AprilTagDetection, AprilTagDetectionArray
+from apriltag_toolbox.srv import SaveMap, SaveMapResponse
 
 from tag_map import TagMap
 from mapper import Mapper
-from utils import is_inside_image_center, mkmat
-# from visualizer import ApriltagVisualizer
+from utils import is_inside_image_center, mkmat, transform_cv_coord, transform_ros_coord
+from visualizer import ApriltagVisualizer, Color
 
 class MapperNode:
     def __init__(self, frame_id):
         self._frame_id = frame_id
         self._map = TagMap()
         self._mapper = Mapper(0.04, 1)
-        # self._tag_viz = ApriltagVisualizer(self, "apriltags_map")
-        # self._tag_viz.set_color(apriltag_toolbox.GREEN)
-        # self._tag_viz.set_alpha(0.75)
+        self._tag_viz = ApriltagVisualizer("apriltags_map")
+        self._tag_viz.set_color(Color.GREEN)
+        self._tag_viz.set_alpha(0.75)
         self._tf_broadcaster = tf.TransformBroadcaster()
+        
+        map_filepath = rospy.get_param("~map", None)
+        if map_filepath is not None:
+            self._load_map(map_filepath)
         
         self._camera_info = None
         self._K = None
@@ -31,6 +36,8 @@ class MapperNode:
 
         self._sub_tags = rospy.Subscriber("apriltags", AprilTagDetectionArray, self._tags_callback, queue_size=1)
         self._sub_cinfo = rospy.Subscriber("camera_info", CameraInfo, self._camera_info_callback, queue_size=1)
+        
+        self._save_map_srv = rospy.Service('save_map', SaveMap, self._save_map_callback)
 
 
     def get_good_tags(self, tags_c : List[AprilTagDetection]):
@@ -38,6 +45,7 @@ class MapperNode:
         
         for tag_c in tags_c:
             if is_inside_image_center(tag_c.center[0], tag_c.center[1], self._camera_info.width, self._camera_info.height, 5):
+                tag_c.pose.pose.pose = transform_cv_coord(tag_c.pose.pose.pose)
                 tags_c_good.append(tag_c)
         return tags_c_good
 
@@ -91,8 +99,9 @@ class MapperNode:
             self._mapper.initialize(self._map.first_tag())
 
         # Publish camera to world transform
-        position = [pose.position.x, pose.position.y, pose.position.z]
-        orientation = [pose.orientation.x, pose.orientation.y, pose.orientation.z, pose.orientation.w]
+        ros_pose = transform_ros_coord(pose)
+        position = [ros_pose.position.x, ros_pose.position.y, ros_pose.position.z]
+        orientation = [ros_pose.orientation.x, ros_pose.orientation.y, ros_pose.orientation.z, ros_pose.orientation.w]
         self._tf_broadcaster.sendTransform(
             position,
             orientation,
@@ -102,7 +111,7 @@ class MapperNode:
         )
 
         # Publish visualisation markers
-        # self._tag_viz.PublishApriltagsMarker(self._map.tags_w(), self._frame_id, tags_c_msg.header.stamp)
+        self._tag_viz.publish_apriltags_marker(self._map.tags_w(), self._frame_id, tags_c_msg.header.stamp)
 
 
     def _camera_info_callback(self, cinfo_msg : CameraInfo):
@@ -113,6 +122,25 @@ class MapperNode:
         self._camera_info = cinfo_msg
         self._K = mkmat(3, 3, cinfo_msg.K)
         self._D = mkmat(len(cinfo_msg.D), 1, cinfo_msg.D)
+
+
+    def _save_map_callback(self, msg):
+        response = SaveMapResponse()
+        filename = msg.path
+        if not filename.startswith("/"):
+            filename = os.path.join(os.getcwd(), filename)
+        p = pathlib.Path(filename)
+        if not os.path.exists(p.parent):
+            rospy.logerr(f"{rospy.get_namespace()}: {p.parent} does not exist")
+            return response
+        if not os.path.exists(p):
+            os.makedirs(p)
+        self._mapper.save_map(p)
+        return response
+    
+
+    def _load_map(self, filepath: str):
+        self._mapper.load_map(pathlib.Path(filepath))
 
 
 if __name__ == '__main__':

@@ -9,7 +9,7 @@ import quaternion
 import rospy
 from geometry_msgs.msg import Pose
 from apriltag_toolbox.msg import AprilTagDetection
-from utils import transform_ros_coord, rodrigues_to_quat, set_corners
+from utils import rodrigues_to_quat, set_corners
 
 
 class TagMap:
@@ -97,7 +97,7 @@ class TagMap:
         pose.orientation.z = w_Q_c.z
         pose.orientation.w = w_Q_c.w
 
-        return transform_ros_coord(pose)
+        return pose
 
     
     ##########

@@ -25,14 +25,14 @@ def euler_from_matrix(matrix):
     return quaternion_to_euler(q)
 
 
-# XYZ -> -Y-ZX
+# XY-Z -> YZX
 def transform_ros_coord(cv_pose):
     position = cv_pose.position
     orientation = cv_pose.orientation
     eular = quaternion_to_euler(orientation)
-    new_euler = Vector3(x=eular.z, y=-eular.x, z=-eular.y)
+    new_euler = Vector3(x=-eular.z, y=eular.x, z=eular.y)
     
-    new_position = Point(x=position.z, y=-position.x, z=-position.y)
+    new_position = Point(x=-position.z, y=position.x, z=position.y)
     new_orientation = tf.transformations.quaternion_from_euler(new_euler.x, new_euler.y, new_euler.z)
     new_pose = Pose(position=new_position, orientation=Quaternion(x=new_orientation[0], y=new_orientation[1], z=new_orientation[2], w=new_orientation[3]))
     return new_pose
@@ -45,13 +45,14 @@ def transform_cv_coord(ros_pose):
     eular = quaternion_to_euler(orientation)
     new_euler = Vector3(x=-eular.y, y=-eular.z, z=eular.x)
     
-    new_position = Point(x=position.y, y=-position.z, z=position.x)
+    new_position = Point(x=-position.y, y=-position.z, z=position.x)
     new_orientation = tf.transformations.quaternion_from_euler(new_euler.x, new_euler.y, new_euler.z)
     new_pose = Pose(position=new_position, orientation=Quaternion(x=new_orientation[0], y=new_orientation[1], z=new_orientation[2], w=new_orientation[3]))
     return new_pose
 
 
 def is_inside_image_center(x: float, y: float, w: int, h: int, k: float) -> bool:
+    return True
     return x > w / k and y > h / k and x < (w - w / k) and y < (h - h / k)
 
 
