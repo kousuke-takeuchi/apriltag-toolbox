@@ -1,5 +1,6 @@
 from typing import List
 import array
+import math
 import cv2
 import numpy as np
 import quaternion
@@ -25,28 +26,39 @@ def euler_from_matrix(matrix):
     return quaternion_to_euler(q)
 
 
-# XY-Z -> YZX
 # XYZ -> -Y-ZX
 def transform_ros_coord(cv_pose):
     position = cv_pose.position
     orientation = cv_pose.orientation
     eular = quaternion_to_euler(orientation)
-    new_euler = Vector3(x=-eular.z, y=-eular.x, z=-eular.y)
+    new_euler = Vector3(x=eular.z, y=-eular.x, z=-eular.y)
     
-    new_position = Point(x=-position.z, y=-position.x, z=-position.y)
+    new_position = Point(x=position.z, y=-position.x, z=-position.y)
     new_orientation = tf.transformations.quaternion_from_euler(new_euler.x, new_euler.y, new_euler.z)
     new_pose = Pose(position=new_position, orientation=Quaternion(x=new_orientation[0], y=new_orientation[1], z=new_orientation[2], w=new_orientation[3]))
     return new_pose
 
 
-# XYZ = Z-X-Y
+def transform_viz_coord(cv_pose):
+    position = cv_pose.position
+    orientation = cv_pose.orientation
+    eular = quaternion_to_euler(orientation)
+    new_euler = Vector3(x=-eular.z, y=eular.x+math.pi/2, z=-eular.y)
+    
+    new_position = Point(x=-position.z, y=position.x, z=-position.y)
+    new_orientation = tf.transformations.quaternion_from_euler(new_euler.x, new_euler.y, new_euler.z)
+    new_pose = Pose(position=new_position, orientation=Quaternion(x=new_orientation[0], y=new_orientation[1], z=new_orientation[2], w=new_orientation[3]))
+    return new_pose
+
+
+# XYZ -> Z-X-Y
 def transform_cv_coord(ros_pose):
     position = ros_pose.position
     orientation = ros_pose.orientation
     eular = quaternion_to_euler(orientation)
-    new_euler = Vector3(x=-eular.y, y=-eular.z, z=eular.x)
+    new_euler = Vector3(x=eular.y, y=-eular.z, z=-eular.x)
     
-    new_position = Point(x=-position.y, y=-position.z, z=position.x)
+    new_position = Point(x=position.y, y=-position.z, z=-position.x)
     new_orientation = tf.transformations.quaternion_from_euler(new_euler.x, new_euler.y, new_euler.z)
     new_pose = Pose(position=new_position, orientation=Quaternion(x=new_orientation[0], y=new_orientation[1], z=new_orientation[2], w=new_orientation[3]))
     return new_pose

@@ -21,5 +21,10 @@
         <rosparam command="load" file="$(find apriltag_toolbox)/config/apriltag.yaml"/>
     </node>
 
-
+    <!-- mapper node -->
+    <node pkg="apriltag_toolbox" type="mapper_node.py" name="mapper_node" output="screen">
+        <remap from="apriltags" to="/tag_detections" />
+        <remap from="camera_info" to="/camera_info" />
+        <!-- <param name="map" value="$(find apriltag_toolbox)/map" /> -->
+    </node>
 </launch>

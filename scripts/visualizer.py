@@ -9,7 +9,7 @@ from visualization_msgs.msg import Marker, MarkerArray
 from std_msgs.msg import ColorRGBA
 from apriltag_toolbox.msg import AprilTagDetectionArray, AprilTagDetection
 
-from utils import transform_ros_coord
+from utils import transform_viz_coord
 
 
 
@@ -65,7 +65,7 @@ class ApriltagVisualizer:
             marker.scale.x = marker.scale.y = tag.size[0]
             marker.scale.z = marker.scale.x / 10
             marker.color = self._color
-            marker.pose = transform_ros_coord(tag.pose.pose.pose)
+            marker.pose = transform_viz_coord(tag.pose.pose.pose)
             marker_array.markers.append(marker)
 
         for id in del_ids:

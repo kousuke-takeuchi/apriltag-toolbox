@@ -73,37 +73,15 @@ Visualization Manager:
           Value: true
         1:
           Value: true
-        2:
-          Value: true
-        3:
-          Value: true
-        4:
-          Value: true
-        5:
-          Value: true
         All Enabled: false
+        base_link:
+          Value: true
         camera:
           Value: true
-        oak-d-base-frame:
-          Value: false
-        oak-d_frame:
-          Value: false
-        oak_imu_frame:
-          Value: false
-        oak_left_camera_frame:
-          Value: false
-        oak_left_camera_optical_frame:
-          Value: false
-        oak_model_origin:
-          Value: false
-        oak_rgb_camera_frame:
-          Value: false
-        oak_rgb_camera_optical_frame:
-          Value: false
-        oak_right_camera_frame:
-          Value: false
-        oak_right_camera_optical_frame:
-          Value: false
+        map:
+          Value: true
+        odom:
+          Value: true
         world:
           Value: true
       Marker Alpha: 1
@@ -118,14 +96,6 @@ Visualization Manager:
             {}
           1:
             {}
-          2:
-            {}
-          3:
-            {}
-          4:
-            {}
-          5:
-            {}
           world:
             {}
       Update Interval: 0
@@ -135,14 +105,14 @@ Visualization Manager:
       Marker Topic: /apriltags_map
       Name: MarkerArray
       Namespaces:
-        {}
+        "": true
       Queue Size: 100
       Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
     Default Light: true
-    Fixed Frame: camera
+    Fixed Frame: world
     Frame Rate: 30
   Name: root
   Tools:
@@ -166,7 +136,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 2.248291254043579
+      Distance: 4.811312198638916
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -182,9 +152,9 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.6802033185958862
+      Pitch: 0.7052032351493835
       Target Frame: <Fixed Frame>
-      Yaw: 6.070390701293945
+      Yaw: 3.837209463119507
     Saved: ~
 Window Geometry:
   Displays:
@@ -205,4 +175,4 @@ Window Geometry:
     collapsed: false
   Width: 1853
   X: 0
-  Y: 5
+  Y: 3
