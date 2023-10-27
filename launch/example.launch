@@ -1,6 +1,10 @@
 <?xml version="1.0"?>
 <launch>
-    <arg name="name" default="test1" />
+    <arg name="name" default="pitakuru" />
+    <arg name="image_topic" default="/image_raw" />
+    <arg name="info_topic" default="/camera_info" />
+    <!-- <arg name="image_topic" default="/rgb_publisher/color/image" />
+    <arg name="info_topic" default="/rgb_publisher/color/camera_info" /> -->
     <arg name="bagfile" default="$(find apriltag_toolbox)/resources/$(arg name).bag" />
     <arg name="rviz_config" default="$(find apriltag_toolbox)/rviz/example.rviz" />
 
@@ -10,17 +14,12 @@
     <!-- apriltag detection node -->
     <node pkg="apriltag_toolbox" type="apriltag_node.py" name="apriltag_node" clear_params="true" output="screen">
         <!-- Remap topics from those used in code to those on the ROS network -->
-        <remap from="image_rect" to="/rgb_publisher/color/image" />
-        <remap from="camera_info" to="/rgb_publisher/color/camera_info" />
+        <remap from="image_rect" to="$(arg image_topic)" />
+        <remap from="camera_info" to="$(arg info_topic)" />
 
         <!-- load parameters (incl. tag family, tags, etc.) -->
         <rosparam command="load" file="$(find apriltag_toolbox)/config/apriltag.yaml"/>
     </node>
 
-    <!-- mapper node -->
-    <node pkg="apriltag_toolbox" type="mapper_node.py" name="mapper_node" output="screen">
-        <remap from="apriltags" to="/tag_detections" />
-        <remap from="camera_info" to="/rgb_publisher/color/camera_info" />
-        <!-- <param name="map" value="$(find apriltag_toolbox)/map" /> -->
-    </node>
+
 </launch>

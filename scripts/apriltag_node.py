@@ -98,7 +98,6 @@ class ApriltagNode(object):
             corners = corners[0].tolist() + corners[1].tolist() + corners[2].tolist() + corners[3].tolist()
             det.corners = corners
             det.R = tag.pose_R[0, :].tolist() + tag.pose_R[1, :].tolist() + tag.pose_R[2, :].tolist()
-            t = tag.pose_t.tolist()
             det.t = tag.pose_t[0].tolist() + tag.pose_t[1].tolist() + tag.pose_t[2].tolist()
             det.err = tag.pose_err
 
