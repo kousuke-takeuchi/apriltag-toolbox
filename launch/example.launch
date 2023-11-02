@@ -1,9 +1,12 @@
 <?xml version="1.0"?>
 <launch>
     <arg name="name" default="pitakuru" />
+    <arg name="ground_mode" default="true" />
     <arg name="image_topic" default="/image_raw" />
     <arg name="info_topic" default="/camera_info" />
-    <!-- <arg name="image_topic" default="/rgb_publisher/color/image" />
+    <!-- <arg name="name" default="test1" />
+    <arg name="ground_mode" default="false" />
+    <arg name="image_topic" default="/rgb_publisher/color/image" />
     <arg name="info_topic" default="/rgb_publisher/color/camera_info" /> -->
     <arg name="bagfile" default="$(find apriltag_toolbox)/resources/$(arg name).bag" />
     <arg name="rviz_config" default="$(find apriltag_toolbox)/rviz/example.rviz" />
@@ -24,7 +27,8 @@
     <!-- mapper node -->
     <node pkg="apriltag_toolbox" type="mapper_node.py" name="mapper_node" output="screen">
         <remap from="apriltags" to="/tag_detections" />
-        <remap from="camera_info" to="/camera_info" />
+        <remap from="camera_info" to="$(arg info_topic)" />
+        <param name="ground_mode" value="$(arg ground_mode)" type="bool" />
         <!-- <param name="map" value="$(find apriltag_toolbox)/map" /> -->
     </node>
 </launch>

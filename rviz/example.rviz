@@ -82,7 +82,7 @@ Visualization Manager:
           Value: true
         odom:
           Value: true
-        world:
+        tag_map:
           Value: true
       Marker Alpha: 1
       Marker Scale: 1
@@ -91,13 +91,12 @@ Visualization Manager:
       Show Axes: true
       Show Names: true
       Tree:
-        camera:
-          0:
-            {}
-          1:
-            {}
-          world:
-            {}
+        tag_map:
+          camera:
+            0:
+              {}
+            1:
+              {}
       Update Interval: 0
       Value: true
     - Class: rviz/MarkerArray
@@ -112,7 +111,7 @@ Visualization Manager:
   Global Options:
     Background Color: 48; 48; 48
     Default Light: true
-    Fixed Frame: world
+    Fixed Frame: tag_map
     Frame Rate: 30
   Name: root
   Tools:
@@ -136,7 +135,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 4.811312198638916
+      Distance: 6.076349258422852
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -144,17 +143,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: -0.11079747974872589
-        Y: -0.14187705516815186
-        Z: 0.0770755410194397
+        X: -0.46188026666641235
+        Y: -1.1901851892471313
+        Z: -0.42394405603408813
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.7052032351493835
+      Pitch: 0.07979634404182434
       Target Frame: <Fixed Frame>
-      Yaw: 3.837209463119507
+      Yaw: 2.684023857116699
     Saved: ~
 Window Geometry:
   Displays:
@@ -175,4 +174,4 @@ Window Geometry:
     collapsed: false
   Width: 1853
   X: 0
-  Y: 3
+  Y: 7

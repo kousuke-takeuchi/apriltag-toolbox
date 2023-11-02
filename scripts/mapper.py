@@ -33,7 +33,7 @@ class Mapper:
         self._params = gtsam.ISAM2Params()
         self._isam2 = gtsam.ISAM2(self._params)
 
-        tag_noise_vector = [0.2,0.2,0.2,0.1,0.1,0.1]
+        tag_noise_vector = [0.6,0.6,0.6,0.3,0.3,0.3]
         small_noise_vector = [0.1,0.1,0.1,0.05,0.05,0.05]
         self._tag_noise = gtsam.noiseModel.Diagonal.Sigmas(tag_noise_vector)
         self._small_noise = gtsam.noiseModel.Diagonal.Sigmas(small_noise_vector)

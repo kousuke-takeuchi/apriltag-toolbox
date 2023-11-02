@@ -41,6 +41,9 @@ class TagMap:
         pose.orientation.y = 0
         pose.orientation.z = 0
         pose.orientation.w = 1
+        # pose = Pose()
+        # pose.position = tag_c.pose.pose.pose.position
+        # pose.orientation = tag_c.pose.pose.pose.orientation
         self._add_tag(tag_c, pose)
 
     def init(self) -> bool:
@@ -82,12 +85,20 @@ class TagMap:
             return
         
         c_R_w, _ = cv2.Rodrigues(c_r_w.reshape(3))
-        w_T_c = -c_R_w.T * c_t_w
         
+        w_T_c = -c_R_w.T * c_t_w
+
         pose = Pose()
         pose.position.x = w_T_c[0]
         pose.position.y = w_T_c[1]
         pose.position.z = w_T_c[2]
+        
+        # w_T_c = -c_R_w.T @ c_t_w
+
+        # pose = Pose()
+        # pose.position.x = w_T_c[0][0]
+        # pose.position.y = w_T_c[1][0]
+        # pose.position.z = w_T_c[2][0]
 
         quat = rodrigues_to_quat(c_R_w)
         quat = np.quaternion(quat[0], quat[1], quat[2], quat[3])

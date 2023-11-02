@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import copy
-import time
-import argparse
+import math
 
 import cv2
 from pupil_apriltags import Detector
@@ -15,7 +13,7 @@ from sensor_msgs.msg import Image, CameraInfo
 from geometry_msgs.msg import Point, Quaternion, Pose, PoseWithCovarianceStamped
 
 from apriltag_toolbox.msg import AprilTagDetectionArray, AprilTagDetection
-from utils import transform_ros_coord
+from utils import transform_apriltag_coord, quaternion_to_euler, euler_to_quaternion, is_ahead_center_and_nearby
 
 
 class ApriltagNode(object):
@@ -107,14 +105,21 @@ class ApriltagNode(object):
             R[2] = R[2] + [0.0]
             R.append([0.0, 0.0, 0.0, 1.0])
             
-            p = Point(x=det.t[0], y=det.t[1], z=det.t[2])
+            p = Point(x=-det.t[0], y=det.t[1], z=det.t[2])
             quat = quaternion_from_matrix(R)
             quat = quat.tolist()
             q = Quaternion(x=quat[0], y=quat[1], z=quat[2], w=quat[3])
+            euler = quaternion_to_euler(q)
+            euler.x = euler.x + math.pi
+            euler.z = euler.z + math.pi
+            q = euler_to_quaternion(euler)
             pose = Pose(position=p, orientation=q)
-            det.pose.pose.pose = transform_ros_coord(pose)
+            det.pose.pose.pose = transform_apriltag_coord(pose)
             det.pose.header = self.current_image.header
             det.pose.header.frame_id = tag.tag_id
+            
+            if not is_ahead_center_and_nearby(det, math.pi / 4):
+                continue
 
             detections.append(det)
         
